@@ -1,0 +1,40 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: system
+  datasource:
+    url: "jdbc:mysql://studentcourseregistrationsystem.cvu6ukawavt3.us-east-1.rds.amazonaws.com/registration"
+    username: "admin"
+    password: "EV1234!!"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        default_schema: registration
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    com.system: DEBUG
+  file:
+    name: logs/system.log
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  logback:
+    rollingpolicy:
+      fileNamePattern: logs/system-%d{yyyy-MM-dd}.%i.log
+      maxFileSize: 10MB
+      maxHistory: 30
