@@ -1,6 +1,6 @@
 # Student Course Registration System
 
-This project is a complete student course registration system developed using **Spring Boot**, **Java**, **Maven**, **MySQL**, and **Hibernate (JPA)**. It was developed within 48 hours as part of a sprint challenge to demonstrate skills in database design, backend development, and creating a functional web application.
+This project is a complete student registration to courses system developed using **Spring Boot**, **Java**, **Maven**, **MySQL**, and **Hibernate (JPA)**. It was developed within 48 hours as part of a sprint challenge to demonstrate skills in database design and backend development.
 
 ---
 
@@ -25,6 +25,17 @@ This project is a complete student course registration system developed using **
 
 ## Features
 
+### Project Features
+
+- **Modular Architecture**: Easily extendable and maintainable codebase.
+- **Input Validation**: Ensures data integrity and prevents invalid data entry.
+- **RBAC (Role-Based Access Control)**: Fine-grained user permissions for Admins and Students.
+- **Data Security**: Using BCrypt for storing hashed passwords and prevent logging of sensitive data.
+- **ORM Integration**: Simplified database interaction using Hibernate (JPA).
+- **Database Migration with Flyway**: Automatic database schema creation and version control with pre-seeded default values.
+- **Logging**: Comprehensive logging for debugging and monitoring.
+- **Error Handling**: Graceful management of runtime errors and exceptions.
+
 ### Admin Features
 
 - **Authentication**: Admins can log in using their email and password.
@@ -43,23 +54,11 @@ This project is a complete student course registration system developed using **
 - **Cancel Registration**: Students can cancel their registration for a course.
 - **View Registered Courses**: Students can view the list of courses they are registered for.
 
-### General Features
-
-- **Modular Architecture**: Easily extendable and maintainable codebase.
-- **Input Validation**: Ensures data integrity and prevents invalid data entry.
-- **RBAC (Role-Based Access Control)**: Fine-grained user permissions for Admins and Students.
-- **Secure Authentication**: Session handling with session keys for authenticated requests.
-- **ORM Integration**: Simplified database interaction using Hibernate (JPA).
-- **Database Migration with Flyway**: Automatic database schema creation and version control with pre-seeded default values.
-- **Logging**: Comprehensive logging for debugging and monitoring.
-- **Error Handling**: Graceful management of runtime errors and exceptions.
-
-
 ---
 
 ## Architecture
 
-- **Backend**: Spring Boot 3 application providing RESTful APIs.
+- **Backend**: Spring Boot application providing RESTful APIs.
 - **Database**: MySQL database managing relational data.
 - **ORM**: Hibernate (JPA) for database interaction.
 - **Authentication**: Session-based authentication with session keys.
@@ -132,20 +131,13 @@ Alternatively, you can view the API documentation on SwaggerHub:
 
 ## Database Schema
 
-The database schema is managed using Flyway migrations. The SQL scripts are located in the `src/main/resources/db/migration` folder.
+The database schema is managed using Flyway migrations.
+<br>Information about the schema are in the [design file](docs/system%20design.md#412-database-schema).
+<br>The database schema is managed using Flyway migrations.
+<br>The SQL scripts are located in the `src/main/resources/db/migration` folder.
 
 - **Initial Schema Creation**: [V1__Create_tables.sql](src/main/resources/db/migration/V1__Create_tables.sql)
 - **Sample Data Insertion**: [V2__Insert_initial_values.sql](src/main/resources/db/migration/V2__Insert_initial_values.sql)
-
----
-
-## Postman Collection
-
-A Postman collection with all API endpoints is provided for easy testing:
-
-- [Student Course Registration System API.postman_collection.json](docs/Student%20Course%20Registration%20System%20API.postman_collection.json)
-
-Import this file into Postman to quickly test all the API endpoints.
 
 ---
 
@@ -164,6 +156,13 @@ Import this file into Postman to quickly test all the API endpoints.
 - **Password**: `1234`
 - 
 ### Using Postman
+
+A Postman collection with all API endpoints is provided for easy testing:
+
+- [Student Course Registration System API.postman_collection.json](docs/Student%20Course%20Registration%20System%20API.postman_collection.json)
+
+Import this file into Postman to quickly test all the API endpoints.
+
 - Import the Postman collection.
 - Use the **Login** endpoints to authenticate as Admin or Student.
 - The session key will be extracted by the post-request script and automatically configured for subsequent API calls.
