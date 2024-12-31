@@ -191,7 +191,9 @@
   <dependency>
     <groupId>org.projectlombok</groupId>
     <artifactId>lombok</artifactId>
+    <version>1.18.36</version>
     <optional>true</optional>
+    <scope>provided</scope>
   </dependency>
 
   <!-- Test Dependencies -->
@@ -207,32 +209,81 @@
     <version>1.8.0</version>
   </dependency>
 
+  <dependency>
+    <groupId>org.openapitools</groupId>
+    <artifactId>jackson-databind-nullable</artifactId>
+    <version>0.2.6</version>
+  </dependency>
+
+<!--  for jwt creation-->
+  <dependency>
+    <groupId>javax.xml.bind</groupId>
+    <artifactId>jaxb-api</artifactId>
+    <version>2.3.1</version>
+  </dependency>
+
 
 </dependencies>
 
-<build>
-  <plugins>
-<!--    <plugin>-->
-<!--      <groupId>org.flywaydb</groupId>-->
-<!--      <artifactId>flyway-maven-plugin</artifactId>-->
-<!--      <version>11.1.0</version>-->
-<!--      <executions>-->
-<!--        <execution>-->
-<!--          <goals>-->
-<!--            <goal>migrate</goal>-->
-<!--          </goals>-->
-<!--        </execution>-->
-<!--      </executions>-->
-<!--    </plugin>-->
-    <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-compiler-plugin</artifactId>
-      <version>4.0.0-beta-1</version>
-      <configuration>
-        <release>23</release>
-      </configuration>
-    </plugin>
-  </plugins>
-</build>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <version>7.10.0</version>
+        <executions>
+          <execution>
+            <id>generate-sources</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <phase>generate-sources</phase>
+            <configuration>
+              <inputSpec>${project.basedir}/src/main/resources/openapi.yaml</inputSpec>
+              <generatorName>spring</generatorName>
+              <apiPackage>com.system.api</apiPackage>
+              <modelPackage>com.system.model</modelPackage>
+              <invokerPackage>com.system.invoker</invokerPackage>
+              <configOptions>
+                <delegatePattern>true</delegatePattern>
+                <useTags>true</useTags>
+                <interfaceOnly>true</interfaceOnly>
+                <useSpringBoot3>true</useSpringBoot3>
+                <dateLibrary>java8</dateLibrary>
+<!--                <useLombok>true</useLombok>-->
+<!--                <lombok>true</lombok>-->
+<!--                <additionalModelTypeAnnotations>-->
+<!--                  @lombok.Builder-->
+<!--                  @lombok.NoArgsConstructor-->
+<!--                  @lombok.AllArgsConstructor-->
+<!--                </additionalModelTypeAnnotations>-->
+              </configOptions>
+
+              <generateApis>false</generateApis>
+              <generateApiTests>false</generateApiTests>
+              <generateModelTests>false</generateModelTests>
+              <skipValidateSpec>false</skipValidateSpec>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
+        <configuration>
+          <source>17</source>
+          <target>17</target>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>1.18.30</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>

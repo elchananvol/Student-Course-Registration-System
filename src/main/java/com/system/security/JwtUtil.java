@@ -1,45 +1,60 @@
-package com.system.security.util;
+package com.system.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.system.model.LoginResponse;
+import com.system.util.Exceptions;
+import io.jsonwebtoken.*;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class JwtUtil {
 
-    private String secretKey = "secret";  // You should store this securely
+    private final String SECRET_KEY = "your-very-secure-secret-key"; // Replace with secure key
 
-    public String generateToken(String username) {
+    // Token validity in milliseconds (e.g., 1 hour)
+    private final long VALIDITY = 3600000;
+
+    public String generateToken(String email, LoginResponse.RoleEnum role, Integer studentId) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", role);
+        if (studentId != null) {
+            claims.put("studentId", studentId);
+        }
+        return createToken(claims, email);
+    }
+
+    private String createToken(Map<String, Object> claims, String subject) {
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + VALIDITY);
+
         return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours expiration
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+    public Claims extractClaims(String token) throws ExpiredJwtException {
+        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
-    private <T> T extractClaim(String token, ClaimsExtractor<T> claimsExtractor) {
-        final Claims claims = extractAllClaims(token);
-        return claimsExtractor.extract(claims);
+    public boolean validateToken(String token) {
+        try {
+            extractClaims(token);
+            return true;
+        } catch (ExpiredJwtException e) {
+            // Token expired
+            return false;
+        } catch (Exception e) {
+            // Invalid token
+            return false;
+        }
     }
 
-    private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(secretKey)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
-    @FunctionalInterface
-    interface ClaimsExtractor<T> {
-        T extract(Claims claims);
-    }
 }

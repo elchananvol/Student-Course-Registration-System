@@ -1,0 +1,567 @@
+
+
+openapi: 3.0.3
+info:
+  title: Student Management API
+  version: 1.0.0
+servers:
+  - url: /api
+paths:
+  /login:
+    post:
+      summary: Authenticate admin or student and provide JWT session token.
+      operationId: login
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Successful authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          $ref: '#/components/responses/Error400'
+        '500':
+          $ref: '#/components/responses/Error500'
+
+  /admin/students:
+    post:
+      summary: Create a new student.
+      operationId: createStudent
+      tags:
+        - Admin - Student Management
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentCreationRequest'
+      responses:
+        '200':
+          description: Student created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentResponse'
+        '400':
+          $ref: '#/components/responses/Error400'
+        '409':
+          $ref: '#/components/responses/Error409'
+        '500':
+          $ref: '#/components/responses/Error500'
+    get:
+      summary: Retrieve all students with their registered courses.
+      operationId: getAllStudents
+      tags:
+        - Admin - Student Management
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudentResponse'
+        '400':
+          $ref: '#/components/responses/Error400'
+        '403':
+          $ref: '#/components/responses/Error403'
+        '500':
+          $ref: '#/components/responses/Error500'
+
+  /admin/students/{id}:
+    get:
+      summary: Retrieve a specific student by ID.
+      operationId: getStudentById
+      tags:
+        - Admin - Student Management
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/StudentId'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentResponse'
+        '400':
+          $ref: '#/components/responses/Error400'
+        '403':
+          $ref: '#/components/responses/Error403'
+        '404':
+          $ref: '#/components/responses/Error404'
+        '500':
+          $ref: '#/components/responses/Error500'
+    put:
+      summary: Update student information.
+      operationId: updateStudent
+      tags:
+        - Admin - Student Management
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/StudentId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentUpdateRequest'
+      responses:
+        '200':
+          description: Student updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentResponse'
+        '400':
+          $ref: '#/components/responses/Error400'
+        '403':
+          $ref: '#/components/responses/Error403'
+        '404':
+          $ref: '#/components/responses/Error404'
+        '500':
+          $ref: '#/components/responses/Error500'
+    delete:
+      summary: Delete a student.
+      operationId: deleteStudent
+      tags:
+        - Admin - Student Management
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/StudentId'
+      responses:
+        '204':
+          description: Student deleted successfully
+        '400':
+          $ref: '#/components/responses/Error400'
+        '403':
+          $ref: '#/components/responses/Error403'
+        '404':
+          $ref: '#/components/responses/Error404'
+        '500':
+          $ref: '#/components/responses/Error500'
+
+  /admin/courses:
+    post:
+      summary: Create a new course.
+      operationId: createCourse
+      tags:
+        - Admin - Course Management
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseCreationRequest'
+      responses:
+        '200':
+          description: Course created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseResponse'
+        '400':
+          $ref: '#/components/responses/Error400'
+        '409':
+          $ref: '#/components/responses/Error409'
+        '500':
+          $ref: '#/components/responses/Error500'
+    get:
+      summary: Retrieve all courses with enrolled students.
+      operationId: getAllCourses
+      tags:
+        - Admin - Course Management
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CourseResponse'
+        '400':
+          $ref: '#/components/responses/Error400'
+        '403':
+          $ref: '#/components/responses/Error403'
+        '500':
+          $ref: '#/components/responses/Error500'
+
+  /admin/courses/{id}:
+    get:
+      summary: Retrieve a specific course by ID.
+      operationId: getCourseById
+      tags:
+        - Admin - Course Management
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/CourseId'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseResponse'
+        '400':
+          $ref: '#/components/responses/Error400'
+        '403':
+          $ref: '#/components/responses/Error403'
+        '404':
+          $ref: '#/components/responses/Error404'
+        '500':
+          $ref: '#/components/responses/Error500'
+    put:
+      summary: Update course information.
+      operationId: updateCourse
+      tags:
+        - Admin - Course Management
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/CourseId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseUpdateRequest'
+      responses:
+        '200':
+          description: Course updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseResponse'
+        '400':
+          $ref: '#/components/responses/Error400'
+        '403':
+          $ref: '#/components/responses/Error403'
+        '404':
+          $ref: '#/components/responses/Error404'
+        '500':
+          $ref: '#/components/responses/Error500'
+    delete:
+      summary: Delete a course.
+      operationId: deleteCourse
+      tags:
+        - Admin - Course Management
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/CourseId'
+      responses:
+        '204':
+          description: Course deleted successfully
+        '400':
+          $ref: '#/components/responses/Error400'
+        '403':
+          $ref: '#/components/responses/Error403'
+        '404':
+          $ref: '#/components/responses/Error404'
+        '500':
+          $ref: '#/components/responses/Error500'
+
+  /students/courses/:
+    post:
+      summary: Student registers for a course.
+      operationId: registerForCourse
+      tags:
+        - Student - Course Registration
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Course registration details.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseRegistrationRequest'
+      responses:
+        '200':
+          description: Course registered successfully
+        '400':
+          $ref: '#/components/responses/Error400'
+        '403':
+          $ref: '#/components/responses/Error403'
+        '404':
+          $ref: '#/components/responses/Error404'
+        '409':
+          $ref: '#/components/responses/Error409'
+        '500':
+          $ref: '#/components/responses/Error500'
+    delete:
+      summary: Student cancels their registration for a course.
+      operationId: cancelCourseRegistration
+      tags:
+        - Student - Course Registration
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Course cancellation details.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseRegistrationRequest'
+      responses:
+        '204':
+          description: Course registration canceled successfully
+        '400':
+          $ref: '#/components/responses/Error400'
+        '403':
+          $ref: '#/components/responses/Error403'
+        '404':
+          $ref: '#/components/responses/Error404'
+        '500':
+          $ref: '#/components/responses/Error500'
+    get:
+      summary: Retrieve courses the student is registered for.
+      operationId: getRegisteredCourses
+      tags:
+        - Student - Course Registration
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: studentId
+          required: true
+          schema:
+            type: integer
+            example: 737
+          description: The ID of the student.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisteredCoursesResponse'
+        '400':
+          $ref: '#/components/responses/Error400'
+        '403':
+          $ref: '#/components/responses/Error403'
+        '500':
+          $ref: '#/components/responses/Error500'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    StudentId:
+      name: id
+      in: path
+      description: ID of the student
+      required: true
+      schema:
+        type: integer
+    CourseId:
+      name: course_id
+      in: path
+      description: ID of the course
+      required: true
+      schema:
+        type: integer
+
+  responses:
+    Error400:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Error403:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Error404:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Error409:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Error500:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+  schemas:
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+        - email
+        - password
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        role:
+          type: string
+          enum:
+            - admin
+            - student
+      required:
+        - token
+        - role
+
+    StudentCreationRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+      required:
+        - name
+        - email
+
+    StudentUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      additionalProperties: false
+
+    StudentResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        coursesId:
+          type: array
+          items:
+            type: integer
+      required:
+        - id
+        - name
+        - email
+        - password
+
+    CourseCreationRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+      required:
+        - name
+        - description
+
+    CourseUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+      additionalProperties: false
+
+    CourseResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        students_id:
+          type: array
+          items:
+            type: integer
+      required:
+        - id
+        - name
+        - description
+
+    CourseRegistrationRequest:
+      type: object
+      required:
+        - studentId
+        - courseId
+      properties:
+        studentId:
+          type: integer
+          example: 737
+        courseId:
+          type: integer
+          example: 11
+
+    RegisteredCoursesResponse:
+      type: array
+      items:
+        type: integer
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        status:
+          type: integer
+      required:
+        - error
+        - message
+        - status
+
+security:
+  - bearerAuth: []
