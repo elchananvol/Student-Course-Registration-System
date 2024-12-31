@@ -2,15 +2,23 @@ package com.system.security;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
 
+@Component
 public class PasswordGenerator {
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+";
-    private static final int PASSWORD_LENGTH = 12; // ניתן לשנות את האורך פה
+    private static final int PASSWORD_LENGTH = 12;
 
-    public static String generatePassword() {
+    /**
+     * Generate a random password with a default length of 12 characters.
+     *
+     * @return Generated password.
+     */
+    public String generatePassword() {
         SecureRandom random = new SecureRandom();
         StringBuilder password = new StringBuilder(PASSWORD_LENGTH);
 
@@ -22,8 +30,13 @@ public class PasswordGenerator {
         return password.toString();
     }
 
-    public static String encryptPassword(String password) {
-        PasswordEncoder encoder = new BCryptPasswordEncoder();
-        return encoder.encode(password);
+    /**
+     * Encrypt the given password using BCryptPasswordEncoder.
+     *
+     * @param password Plain-text password to be encrypted.
+     * @return Encrypted password.
+     */
+    public String encryptPassword(String password) {
+        return passwordEncoder.encode(password);
     }
 }

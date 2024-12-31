@@ -1,9 +1,8 @@
 package com.system.security;
 
 import com.system.model.LoginResponse;
-import com.system.util.Exceptions;
 import io.jsonwebtoken.*;
-import org.springframework.security.core.Authentication;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -12,19 +11,15 @@ import java.util.Map;
 
 @Component
 public class JwtUtil {
+    @Value("${application.security.jwt.secret-key}")
+    private String SECRET_KEY;
+    @Value("${application.security.jwt.expiration}")
+    private long VALIDITY;
 
-    private final String SECRET_KEY = "your-very-secure-secret-key"; // Replace with secure key
-
-    // Token validity in milliseconds (e.g., 1 hour)
-    private final long VALIDITY = 3600000;
-
-    public String generateToken(String email, LoginResponse.RoleEnum role, Integer studentId) {
+    public String generateToken(Integer id, LoginResponse.RoleEnum role) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", role);
-        if (studentId != null) {
-            claims.put("studentId", studentId);
-        }
-        return createToken(claims, email);
+        return createToken(claims, id.toString());
     }
 
     private String createToken(Map<String, Object> claims, String subject) {

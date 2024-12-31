@@ -1,16 +1,17 @@
 package com.system.service;
 
+import com.system.exceptions.UserExceptions;
 import com.system.model.*;
 import com.system.repository.AdminRepository;
 import com.system.repository.StudentRepository;
 import com.system.security.PasswordGenerator;
-import com.system.util.Exceptions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,25 +22,25 @@ public class StudentService {
     @Autowired
     private AdminRepository adminRepository;
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private PasswordGenerator passwordGenerator;
 
+    @Transactional
     public StudentResponse createStudent(StudentCreationRequest studentCreationRequest) {
         validateUniqueEmail(studentCreationRequest.getEmail(),null);
         Student student = Student.builder().name(studentCreationRequest.getName()).email(studentCreationRequest.getEmail()).build();
-        String generatedPassword = PasswordGenerator.generatePassword();
-        String encryptedPassword = passwordEncoder.encode(generatedPassword);
+        String generatedPassword = passwordGenerator.generatePassword();
+        String encryptedPassword = passwordGenerator.encryptPassword(generatedPassword);
         student.setPasswordHash(encryptedPassword);
         student = studentRepository.save(student);
-        student.setPasswordHash(generatedPassword);
+        StudentResponse response = mapToStudentResponse(student);
+        response.setPassword(generatedPassword);
+        return response;
 
-        return mapToStudentResponse(student);
     }
     @Transactional
     public StudentResponse updateStudent(Integer studentId, StudentUpdateRequest updateRequest) {
         Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new Exceptions.NotFound("Student not found with id: " + studentId));
-
-        // Update only the fields that are not null
+                .orElseThrow(() -> new UserExceptions.NotFound("Student not found with id: " + studentId));
         if (updateRequest.getName() != null) {
             student.setName(updateRequest.getName());
         }
@@ -49,31 +50,27 @@ public class StudentService {
             student.setEmail(updateRequest.getEmail());
         }
         if (updateRequest.getPassword() != null) {
-            student.setPasswordHash(passwordEncoder.encode(updateRequest.getPassword()));
+            student.setPasswordHash(passwordGenerator.encryptPassword(updateRequest.getPassword()));
         }
         Student updatedStudent = studentRepository.save(student);
-
+        StudentResponse response = mapToStudentResponse(updatedStudent);
         if (updateRequest.getPassword() != null) {
-            updatedStudent.setPasswordHash(updateRequest.getPassword());
+            response.setPassword(updateRequest.getPassword());
         }
-        return mapToStudentResponse(updatedStudent);
+        return response;
     }
 
     @Transactional
     public void deleteStudent(Integer studentId) {
         Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new Exceptions.NotFound("Student not found with id: " + studentId));
-
-        // Remove the student from all enrolled courses
-        student.getCourses().forEach(course -> course.getStudents().remove(student));
-
+                .orElseThrow(() -> new UserExceptions.NotFound("Student not found with id: " + studentId));
         studentRepository.delete(student);
     }
 
 
     public StudentResponse getStudentById(Integer studentId) {
         Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new Exceptions.NotFound("Student not found with id: " + studentId));
+                .orElseThrow(() -> new UserExceptions.NotFound("Student not found with id: " + studentId));
 
         return mapToStudentResponse(student);
     }
@@ -86,22 +83,34 @@ public class StudentService {
 
     private StudentResponse mapToStudentResponse(Student student) {
         StudentResponse studentResponse =  new StudentResponse(student.getId(),student.getName(),student.getEmail(),student.getPasswordHash());
-        studentResponse.setCoursesId(student.getCourses().stream()
+        studentResponse.setEnrolledCourseIds(student.getCourses().stream()
                 .map(Course::getId)
                 .collect(Collectors.toList()));
         return studentResponse;
 
     }
+
+    public Set<Integer> getRegisteredCourses(Integer studentId) {
+        Optional<Student> studentOpt = studentRepository.findById(studentId);
+        if (studentOpt.isEmpty()) {
+            throw new UserExceptions.NotFound("Student not found");
+        }
+        Student student = studentOpt.get();
+        return student.getCourses().stream()
+                .map(Course::getId)
+                .collect(Collectors.toSet());
+    }
+
     private void validateUniqueEmail(String email, Integer studentId){
         studentRepository.findByEmail(email)
                 .filter(s -> !s.getId().equals(studentId))
                 .ifPresent(s -> {
-                    throw new Exceptions.StudentRegistration("Email already in use");
+                    throw new UserExceptions.StudentRegistration("Email already in use");
                 });
 
         // Check if the email is already used by an admin
         adminRepository.findByEmail(email).ifPresent(s -> {
-            throw new Exceptions.StudentRegistration("Email already in use");
+            throw new UserExceptions.StudentRegistration("Email already in use");
         });
 
     }

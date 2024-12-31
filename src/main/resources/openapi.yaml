@@ -7,10 +7,33 @@ info:
 servers:
   - url: /api
 paths:
-  /login:
+  /login/admin:
     post:
-      summary: Authenticate admin or student and provide JWT session token.
-      operationId: login
+      summary: Authenticate admin and provide JWT session token.
+      operationId: adminLogin
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Successful authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          $ref: '#/components/responses/Error403'
+        '500':
+          $ref: '#/components/responses/Error500'
+  /login/students:
+    post:
+      summary: Authenticate student and provide JWT session token.
+      operationId: studentsLogin
       tags:
         - Authentication
       requestBody:
@@ -282,7 +305,6 @@ paths:
           $ref: '#/components/responses/Error404'
         '500':
           $ref: '#/components/responses/Error500'
-
   /students/courses/:
     post:
       summary: Student registers for a course.
@@ -371,7 +393,6 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-
   parameters:
     StudentId:
       name: id
@@ -483,7 +504,7 @@ components:
           format: email
         password:
           type: string
-        coursesId:
+        enrolledCourseIds:
           type: array
           items:
             type: integer
@@ -522,7 +543,7 @@ components:
           type: string
         description:
           type: string
-        students_id:
+        enrolledStudentIds:
           type: array
           items:
             type: integer

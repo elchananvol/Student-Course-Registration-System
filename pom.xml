@@ -1,117 +1,3 @@
-<!--<project xmlns="http://maven.apache.org/POM/4.0.0"-->
-<!--         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
-<!--         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0-->
-<!--         http://maven.apache.org/maven-v4_0_0.xsd">-->
-<!--<modelVersion>4.0.0</modelVersion>-->
-
-<!--<groupId>org.example</groupId>-->
-<!--<artifactId>StudentCourseRegistrationSystem</artifactId>-->
-<!--<version>1.0-SNAPSHOT</version>-->
-<!--<packaging>jar</packaging>-->
-
-<!--<name>StudentCourseRegistrationSystem Maven</name>-->
-<!--<description>Student Course Registration System</description>-->
-
-<!--<parent>-->
-<!--  <groupId>org.springframework.boot</groupId>-->
-<!--  <artifactId>spring-boot-starter-parent</artifactId>-->
-<!--  <version>3.3.4</version>-->
-<!--  <relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;-->
-<!--</parent>-->
-
-<!--<properties>-->
-<!--  <java.version>23</java.version>-->
-<!--</properties>-->
-
-<!--<dependencies>-->
-<!--  &lt;!&ndash; Spring Boot Starters &ndash;&gt;-->
-<!--  <dependency>-->
-<!--    <groupId>org.springframework.boot</groupId>-->
-<!--    <artifactId>spring-boot-starter-web</artifactId>-->
-<!--  </dependency>-->
-
-<!--  &lt;!&ndash; Spring Data JPA &ndash;&gt;-->
-<!--  <dependency>-->
-<!--    <groupId>org.springframework.boot</groupId>-->
-<!--    <artifactId>spring-boot-starter-data-jpa</artifactId>-->
-<!--  </dependency>-->
-
-<!--  &lt;!&ndash; MySQL Driver &ndash;&gt;-->
-<!--  <dependency>-->
-<!--    <groupId>com.mysql</groupId>-->
-<!--    <artifactId>mysql-connector-j</artifactId>-->
-<!--    <version>9.0.0</version>-->
-<!--    <scope>runtime</scope>-->
-<!--  </dependency>-->
-
-<!--  &lt;!&ndash; Flyway Migration &ndash;&gt;-->
-<!--  <dependency>-->
-<!--    <groupId>org.flywaydb</groupId>-->
-<!--    <artifactId>flyway-core</artifactId>-->
-<!--  </dependency>-->
-
-<!--  &lt;!&ndash; Logging with SLF4J &ndash;&gt;-->
-<!--  <dependency>-->
-<!--    <groupId>org.springframework.boot</groupId>-->
-<!--    <artifactId>spring-boot-starter-logging</artifactId>-->
-<!--  </dependency>-->
-
-<!--  &lt;!&ndash; JWT (If you plan to use it for authentication) &ndash;&gt;-->
-<!--  <dependency>-->
-<!--    <groupId>io.jsonwebtoken</groupId>-->
-<!--    <artifactId>jjwt</artifactId>-->
-<!--    <version>0.9.1</version>-->
-<!--  </dependency>-->
-
-<!--  &lt;!&ndash; Lombok (Optional for reducing boilerplate code) &ndash;&gt;-->
-<!--  <dependency>-->
-<!--    <groupId>org.projectlombok</groupId>-->
-<!--    <artifactId>lombok</artifactId>-->
-<!--    <optional>true</optional>-->
-<!--  </dependency>-->
-
-<!--  &lt;!&ndash; Testing (JUnit 5) &ndash;&gt;-->
-<!--  <dependency>-->
-<!--    <groupId>org.springframework.boot</groupId>-->
-<!--    <artifactId>spring-boot-starter-test</artifactId>-->
-<!--    <scope>test</scope>-->
-<!--  </dependency>-->
-
-<!--</dependencies>-->
-
-<!--&lt;!&ndash;<build>&ndash;&gt;-->
-<!--&lt;!&ndash;  <finalName>StudentCourseRegistrationSystem</finalName>&ndash;&gt;-->
-<!--&lt;!&ndash;  <plugins>&ndash;&gt;-->
-<!--&lt;!&ndash;    &lt;!&ndash; Maven compiler plugin to use Java 17 &ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;    <plugin>&ndash;&gt;-->
-<!--&lt;!&ndash;      <groupId>org.apache.maven.plugins</groupId>&ndash;&gt;-->
-<!--&lt;!&ndash;      <artifactId>maven-compiler-plugin</artifactId>&ndash;&gt;-->
-<!--&lt;!&ndash;      <version>3.10.1</version>&ndash;&gt;-->
-<!--&lt;!&ndash;      <configuration>&ndash;&gt;-->
-<!--&lt;!&ndash;        <release>17</release>&ndash;&gt;-->
-<!--&lt;!&ndash;      </configuration>&ndash;&gt;-->
-<!--&lt;!&ndash;    </plugin>&ndash;&gt;-->
-<!--&lt;!&ndash;  </plugins>&ndash;&gt;-->
-<!--&lt;!&ndash;</build>&ndash;&gt;-->
-<!--<build>-->
-<!--  <plugins>-->
-<!--    <plugin>-->
-<!--      <groupId>org.springframework.boot</groupId>-->
-<!--      <artifactId>spring-boot-maven-plugin</artifactId>-->
-<!--      <configuration>-->
-<!--        <excludes>-->
-<!--          <exclude>-->
-<!--            <groupId>org.projectlombok</groupId>-->
-<!--            <artifactId>lombok</artifactId>-->
-<!--          </exclude>-->
-<!--        </excludes>-->
-<!--      </configuration>-->
-<!--    </plugin>-->
-<!--  </plugins>-->
-<!--</build>-->
-
-<!--</project>-->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
@@ -205,8 +91,8 @@
 
   <dependency>
     <groupId>org.springdoc</groupId>
-    <artifactId>springdoc-openapi-ui</artifactId>
-    <version>1.8.0</version>
+    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+    <version>2.7.0</version>
   </dependency>
 
   <dependency>
@@ -224,7 +110,6 @@
 
 
 </dependencies>
-
   <build>
     <plugins>
       <plugin>
@@ -250,15 +135,7 @@
                 <interfaceOnly>true</interfaceOnly>
                 <useSpringBoot3>true</useSpringBoot3>
                 <dateLibrary>java8</dateLibrary>
-<!--                <useLombok>true</useLombok>-->
-<!--                <lombok>true</lombok>-->
-<!--                <additionalModelTypeAnnotations>-->
-<!--                  @lombok.Builder-->
-<!--                  @lombok.NoArgsConstructor-->
-<!--                  @lombok.AllArgsConstructor-->
-<!--                </additionalModelTypeAnnotations>-->
               </configOptions>
-
               <generateApis>false</generateApis>
               <generateApiTests>false</generateApiTests>
               <generateModelTests>false</generateModelTests>
@@ -285,5 +162,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>

@@ -1,4 +1,4 @@
-package com.system.util;
+package com.system.exceptions;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
@@ -17,26 +17,27 @@ public class GlobalExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    @ExceptionHandler(BaseException.class)
-    public ResponseEntity<Map<String, Object>> handleBaseException(BaseException ex) {
-        logger.error("An BaseException occurred: ", ex);
+    @ExceptionHandler(UserBaseException.class)
+    public ResponseEntity<Map<String, Object>> handleBaseException(UserBaseException ex) {
+        logger.info("User exception occurred: {}", ex.getMessage());
         Map<String, Object> response = new HashMap<>();
-        response.put("error", ex.getMessage());
-        response.put("code", ex.getErrorCode());
-        return new ResponseEntity<>(response, HttpStatus.valueOf(ex.getErrorCode()));
+        response.put("error", ex.getErrorCode());
+        response.put("details", ex.getMessage());
+        return new ResponseEntity<>(response, ex.getErrorCode());
     }
     @ExceptionHandler({ConstraintViolationException.class, DataIntegrityViolationException.class})
     public ResponseEntity<Map<String, Object>> handleValidationExceptions(Exception ex) {
+        logger.error("Database error occurred: {}", ex.getMessage());
         Map<String, Object> response = new HashMap<>();
-        response.put("error", "Bad Request");
+        response.put("error", HttpStatus.BAD_REQUEST.toString());
         response.put("details", ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGeneralException(Exception ex) {
-        logger.error("An error occurred: ", ex);
+        logger.error("An server error occurred: ", ex);
         Map<String, Object> response = new HashMap<>();
-        response.put("error", "Internal Server Error");
+        response.put("error", HttpStatus.INTERNAL_SERVER_ERROR.toString());
         response.put("details", ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
