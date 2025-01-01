@@ -110,6 +110,7 @@ This project is a complete student registration to courses system developed usin
 You can run the application using Maven:
 
 ```bash
+mvn clean package
 mvn spring-boot:run
 ```
 
