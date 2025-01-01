@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "11908c2b-f579-49da-9771-7376d01e6501",
+		"_postman_id": "a4c7764a-68d4-42b2-b3ce-03ae0a99c221",
 		"name": "Student Course Registration System API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "20238000"
@@ -86,15 +86,6 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": "{{base_url}}admin/courses",
 				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
 			},
@@ -126,15 +117,6 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": "{{base_url}}admin/students",
 				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
 			},
@@ -168,7 +150,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"course3\",\n    \"description\":\"AI\"\n}",
+					"raw": "{\n\t\"name\": \"AI course\",\n    \"description\":\"AI\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -208,7 +190,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"cours\",\n    \"description\":\"AI\"\n\n}",
+					"raw": "{\n\t\"name\": \"SpringBoot course\",\n    \"description\":\"SpringBoot\"\n\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -246,15 +228,6 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": "{{base_url}}admin/courses/2",
 				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
 			},
@@ -328,7 +301,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"student\",\n    \"email\":\"some_email\"\n}",
+					"raw": "{\n\t\"name\": \"student_num2\",\n    \"email\":\"some_email\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -368,7 +341,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"student2\",\n    \"email\":\"another_email\",\n    \"password\":\"12234\"\n}",
+					"raw": "{\n\t\"name\": \"student2\",\n    \"email\":\"another_email\",\n    \"password\":\"12234556h\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -376,6 +349,50 @@
 					}
 				},
 				"url": "{{base_url}}admin/students/2",
+				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "student login after update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body as JSON",
+							"let response = pm.response.json();",
+							"",
+							"// Check if the token exists in the response",
+							"if (response.token) {",
+							"    // Save the token in an environment variable",
+							"    pm.collectionVariables.set(\"student_auth\", response.token);",
+							"} else {",
+							"    console.log(\"Token not found in response\");",
+							"}",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n    \"email\": \"another_email\",\n    \"password\": \"12234556h\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{base_url}}login/student",
 				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
 			},
 			"response": []
@@ -406,15 +423,6 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"name\": \"student2\",\n    \"email\":\"some_emailll\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": "{{base_url}}admin/students/2",
 				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
 			},
@@ -610,15 +618,6 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
 					"raw": "{{base_url}}students/courses?studentId=1",
 					"host": [
@@ -660,10 +659,6 @@
 		}
 	],
 	"variable": [
-		{
-			"key": "id",
-			"value": "1"
-		},
 		{
 			"key": "base_url",
 			"value": "http://localhost:8090/api/"

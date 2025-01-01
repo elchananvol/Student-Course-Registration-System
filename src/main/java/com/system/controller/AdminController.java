@@ -4,6 +4,7 @@ import com.system.model.*;
 import com.system.service.StudentService;
 import com.system.service.CourseService;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,10 +101,7 @@ public class AdminController {
             @PathVariable("id") Integer studentId,
             @Valid @RequestBody StudentUpdateRequest updateRequest) {
 
-        StudentUpdateRequest updateRequestForLogging = updateRequest;
-        if(updateRequestForLogging.getPassword() != null) {updateRequestForLogging.setPassword(null);}
-        logger.info("Updating student with ID: {} using request: {}", studentId, updateRequestForLogging);
-
+        logger.info("Updating student with ID: {}", studentId);
         StudentResponse updatedStudent = studentService.updateStudent(studentId, updateRequest);
         logger.info("Student updated successfully with ID: {}", updatedStudent.getId());
         return ResponseEntity.ok(updatedStudent);
